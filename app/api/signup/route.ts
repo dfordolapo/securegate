@@ -2,6 +2,10 @@ import { hash } from "bcryptjs";
 import { z } from "zod";
 
 import { prisma } from "@/lib/prisma";
+import crypto from "crypto";
+import { sendVerificationEmail } from "@/lib/mail";
+
+
 
 const signupSchema = z.object({
     name: z.string().min(2),
@@ -44,10 +48,20 @@ export async function POST(req: Request) {
                 password: hashedPassword,
             },
         });
+        const token = crypto.randomBytes(32).toString("hex");
 
+        await prisma.verificationToken.create({
+            data: {
+                token,
+                email: user.email,
+                expiresAt: new Date(Date.now() + 15 * 60 * 1000),
+            },
+        });
+
+        await sendVerificationEmail(user.email, token);
         return Response.json(
             {
-                message: "User created successfully",
+                message: "Account created successfully",
                 user: {
                     id: user.id,
                     name: user.name,
@@ -63,7 +77,7 @@ export async function POST(req: Request) {
 
         return Response.json(
             {
-                error: "Something went wrong",
+                error: "Something went wrong. Please wait and try again.",
             },
             {
                 status: 500,
