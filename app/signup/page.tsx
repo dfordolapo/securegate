@@ -26,7 +26,7 @@ export default function SignupPage() {
         const data = await res.json();
 
         if (res.ok) {
-            setMessage("Account created successfully!");
+            setMessage("Account created! Please check your email to verify your account.");
         } else {
             setMessage(data.error || "Something went wrong");
         }

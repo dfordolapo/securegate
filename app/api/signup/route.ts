@@ -1,87 +1,92 @@
-import { hash } from "bcryptjs";
-import { z } from "zod";
+import { NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
+import crypto from "crypto";
 
 import { prisma } from "@/lib/prisma";
-import crypto from "crypto";
 import { sendVerificationEmail } from "@/lib/mail";
-
-
-
-const signupSchema = z.object({
-    name: z.string().min(2),
-    email: z.string().email(),
-    password: z.string().min(6),
-});
 
 export async function POST(req: Request) {
     try {
         const body = await req.json();
 
-        const validatedData = signupSchema.parse(body);
+        const { name, email, password } = body;
+
+        if (!email || !password) {
+            return NextResponse.json(
+                { error: "Missing email or password" },
+                { status: 400 }
+            );
+        }
 
         const existingUser = await prisma.user.findUnique({
             where: {
-                email: validatedData.email,
+                email,
             },
         });
 
         if (existingUser) {
-            return Response.json(
-                {
-                    error: "User already exists",
+
+
+            // Delete any old verification tokens for this user
+            await prisma.verificationToken.deleteMany({
+                where: { identifier: email }
+            });
+
+            // Generate a new token
+            const token = crypto.randomBytes(32).toString("hex");
+
+            await prisma.verificationToken.create({
+                data: {
+                    identifier: email,
+                    token,
+                    expires: new Date(Date.now() + 1000 * 60 * 60),
                 },
-                {
-                    status: 400,
-                }
+            });
+
+            // Resend the email
+            await sendVerificationEmail(email, token);
+
+            return NextResponse.json(
+                { message: "Verification email resent successfully", user: existingUser },
+                { status: 200 }
             );
         }
 
-        const hashedPassword = await hash(
-            validatedData.password,
-            12
-        );
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         const user = await prisma.user.create({
             data: {
-                name: validatedData.name,
-                email: validatedData.email,
+                name,
+                email,
                 password: hashedPassword,
             },
         });
+
         const token = crypto.randomBytes(32).toString("hex");
 
         await prisma.verificationToken.create({
             data: {
+                identifier: email,
                 token,
-                email: user.email,
-                expiresAt: new Date(Date.now() + 15 * 60 * 1000),
+                expires: new Date(Date.now() + 1000 * 60 * 60),
             },
         });
 
-        await sendVerificationEmail(user.email, token);
-        return Response.json(
+        await sendVerificationEmail(email, token);
+
+        return NextResponse.json(
             {
-                message: "Account created successfully",
-                user: {
-                    id: user.id,
-                    name: user.name,
-                    email: user.email,
-                },
+                message: "User created successfully",
+                user,
             },
-            {
-                status: 201,
-            }
+            { status: 201 }
         );
     } catch (error) {
-        console.error(error);
+        console.log("SIGNUP ERROR:", error);
 
-        return Response.json(
-            {
-                error: "Something went wrong. Please wait and try again.",
-            },
-            {
-                status: 500,
-            }
+        return NextResponse.json(
+            { error: "Something went wrong" },
+            { status: 500 }
         );
     }
 }
