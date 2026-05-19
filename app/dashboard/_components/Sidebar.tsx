@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
 import { LayoutDashboard, ShieldAlert, Activity, UserCheck, Settings, LogOut } from "lucide-react";
 
 const navigation = [
@@ -48,7 +49,10 @@ export function Sidebar() {
         </nav>
       </div>
       <div className="p-4 mt-auto border-t border-white/5">
-        <button className="flex items-center w-full px-3 py-2.5 text-sm font-medium text-sidebar-foreground/70 rounded-lg hover:bg-white/5 hover:text-sidebar-foreground transition-all group">
+        <button 
+          onClick={() => signOut({ callbackUrl: '/login' })}
+          className="flex items-center w-full px-3 py-2.5 text-sm font-medium text-sidebar-foreground/70 rounded-lg hover:bg-white/5 hover:text-sidebar-foreground transition-all group"
+        >
           <LogOut className="mr-3 h-5 w-5 text-sidebar-foreground/50 group-hover:text-sidebar-foreground/80 transition-colors" />
           Sign Out
         </button>

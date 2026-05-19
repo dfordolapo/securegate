@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Bell, Search, User, X, CheckCircle2, AlertTriangle, ShieldAlert } from "lucide-react";
+import { Bell, Search, User, X, CheckCircle2, AlertTriangle, ShieldAlert, LogOut, Settings as SettingsIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { signOut } from "next-auth/react";
 
 const mockNotifications = [
   { id: 1, title: 'New Device Detected', desc: 'A new Mac was logged in from Austin, TX.', time: '5m ago', icon: AlertTriangle, unread: true, type: 'warning' },
@@ -20,12 +22,14 @@ const navigationItems = [
 
 export function TopNav() {
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
   const router = useRouter();
 
   const searchRef = useRef<HTMLDivElement>(null);
   const notifRef = useRef<HTMLDivElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -34,6 +38,9 @@ export function TopNav() {
       }
       if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
         setShowNotifications(false);
+      }
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setShowProfileMenu(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -152,13 +159,53 @@ export function TopNav() {
             )}
           </div>
 
-          <div className="relative ml-1">
-            <button className="flex items-center gap-2 rounded-full p-1 pr-3 hover:bg-black/5 transition-colors focus:outline-none focus:ring-2 focus:ring-accent">
+          <div className="relative ml-1" ref={profileRef}>
+            <button 
+              onClick={() => setShowProfileMenu(!showProfileMenu)}
+              className={`flex items-center gap-2 rounded-full p-1 pr-3 transition-colors focus:outline-none focus:ring-2 focus:ring-accent ${showProfileMenu ? 'bg-black/5' : 'hover:bg-black/5'}`}
+            >
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent/10 text-accent">
                 <User className="h-4 w-4" />
               </div>
               <span className="text-sm font-medium text-foreground">Admin</span>
             </button>
+
+            {/* Profile Dropdown */}
+            {showProfileMenu && (
+              <div className="absolute right-0 top-full mt-2 w-56 rounded-xl bg-card border border-border shadow-lg overflow-hidden flex flex-col origin-top-right">
+                <div className="px-4 py-3 border-b border-border bg-background/50">
+                  <p className="text-sm font-medium text-foreground">Admin User</p>
+                  <p className="text-xs text-foreground/60 truncate">admin@securegate.com</p>
+                </div>
+                <div className="py-1">
+                  <Link 
+                    href="/dashboard/settings" 
+                    onClick={() => setShowProfileMenu(false)}
+                    className="flex items-center px-4 py-2 text-sm text-foreground hover:bg-background/80 transition-colors"
+                  >
+                    <User className="mr-3 h-4 w-4 text-foreground/60" />
+                    Profile
+                  </Link>
+                  <Link 
+                    href="/dashboard/settings" 
+                    onClick={() => setShowProfileMenu(false)}
+                    className="flex items-center px-4 py-2 text-sm text-foreground hover:bg-background/80 transition-colors"
+                  >
+                    <SettingsIcon className="mr-3 h-4 w-4 text-foreground/60" />
+                    Settings
+                  </Link>
+                </div>
+                <div className="py-1 border-t border-border">
+                  <button 
+                    onClick={() => signOut({ callbackUrl: '/login' })}
+                    className="flex w-full items-center px-4 py-2 text-sm font-medium text-rose-500 hover:bg-rose-500/10 transition-colors"
+                  >
+                    <LogOut className="mr-3 h-4 w-4" />
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
