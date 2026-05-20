@@ -20,7 +20,7 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0 bg-black/50 z-30 lg:hidden" onClick={onClose} />
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 lg:hidden" onClick={onClose} />
       )}
       <div className={`fixed inset-y-0 left-0 z-40 flex flex-col w-64 bg-sidebar border-r border-border transform transition-transform duration-200 ease-in-out lg:relative lg:z-auto lg:translate-x-0 ${
         isOpen ? 'translate-x-0' : '-translate-x-full'

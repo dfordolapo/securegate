@@ -10,7 +10,7 @@ export default function ThreatMonitorPage() {
 
   return (
     <div className="space-y-6 pb-8">
-      <div>
+      <div className="text-center lg:text-left">
         <h1 className="text-xl font-bold tracking-tight text-foreground">Threat Monitor</h1>
         <p className="text-sm text-muted mt-0.5">Real-time threat detection and anomaly monitoring.</p>
       </div>

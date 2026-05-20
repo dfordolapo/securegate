@@ -11,7 +11,7 @@ export default function AccessControlPage() {
   return (
     <div className="space-y-6 pb-8">
       <div className="flex items-center justify-between flex-wrap gap-3">
-        <div>
+        <div className="text-center lg:text-left">
           <h1 className="text-xl font-bold tracking-tight text-foreground">Access Control</h1>
           <p className="text-sm text-muted mt-0.5">Manage user roles, permissions, and access policies.</p>
         </div>

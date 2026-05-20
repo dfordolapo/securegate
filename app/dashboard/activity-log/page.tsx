@@ -11,7 +11,7 @@ export default function ActivityLogPage() {
 
   return (
     <div className="space-y-6 pb-8">
-      <div>
+      <div className="text-center lg:text-left">
         <h1 className="text-xl font-bold tracking-tight text-foreground">Activity Log</h1>
         <p className="text-sm text-muted mt-0.5">Detailed history of system and user events.</p>
       </div>

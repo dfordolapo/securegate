@@ -3,7 +3,7 @@
 export default function SettingsPage() {
   return (
     <div className="space-y-6 pb-8">
-      <div>
+      <div className="text-center lg:text-left">
         <h1 className="text-xl font-bold tracking-tight text-foreground">Settings</h1>
         <p className="text-sm text-muted mt-0.5">Manage your platform preferences and configurations.</p>
       </div>

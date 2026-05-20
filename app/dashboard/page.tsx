@@ -6,7 +6,7 @@ import { AuthStatus } from "./_components/AuthStatus";
 export default function DashboardPage() {
   return (
     <div className="space-y-6 pb-8">
-      <div>
+      <div className="text-center lg:text-left">
         <h1 className="text-xl font-bold tracking-tight text-foreground">Security Dashboard</h1>
         <p className="text-sm text-muted mt-0.5">Monitor, analyze, and protect your infrastructure.</p>
       </div>
