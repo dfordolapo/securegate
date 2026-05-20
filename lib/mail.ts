@@ -28,7 +28,10 @@ export async function sendPasswordResetEmail(
     const resetLink =
         `${process.env.NEXTAUTH_URL}/reset-password/${token}`;
 
-    await resend.emails.send({
+    console.log("[RESEND] Sending password reset email to:", email);
+    console.log("[RESEND] Reset link:", resetLink);
+
+    const { data, error } = await resend.emails.send({
         from: process.env.EMAIL_FROM!,
         to: email,
         subject: "Reset your password",
@@ -36,4 +39,11 @@ export async function sendPasswordResetEmail(
             resetLink,
         }),
     });
+
+    if (error) {
+        console.error("[RESEND] Error sending password reset email:", error);
+        throw new Error(`Failed to send password reset email: ${error.message}`);
+    }
+
+    console.log("[RESEND] Password reset email sent successfully:", data);
 }
