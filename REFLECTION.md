@@ -3,6 +3,7 @@
 **Name:** Dolapo  
 **Cohort:** Design to MVP Bootcamp  
 **Live URL:** [https://securegateco.vercel.app/]
+
 **GitHub Repo:** [https://github.com/dfordolapo/securegate/]
 
 ---
