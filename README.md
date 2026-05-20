@@ -37,18 +37,7 @@ A security management dashboard built with **Next.js 16** (App Router). Provides
 
 ## Getting Started
 
-```bash
-npm install
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) to view the app.
-
-Set up a `.env` file following `.env.example` with your database, Resend, and Upstash credentials, then run Prisma migrations:
-
-```bash
-npx prisma migrate dev
-```
+Live Demo: https://securegateco.vercel.app/
 
 ## Project Structure
 
