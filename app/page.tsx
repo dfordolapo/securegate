@@ -18,13 +18,30 @@ import {
 import { NavBar } from "@/components/NavBar";
 import { Footer } from "@/components/Footer";
 
+function SectionDivider() {
+  return (
+    <div className="relative w-full">
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
+      </div>
+      <div className="relative flex justify-center py-4">
+        <div className="flex items-center gap-3 bg-background px-4">
+          <div className="h-2 w-2 rounded-full border border-border/30" />
+          <div className="h-2.5 w-2.5 rotate-45 rounded-sm border border-border/50" />
+          <div className="h-2 w-2 rounded-full border border-border/30" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   return (
     <>
       <NavBar />
       <main>
         {/* ── Hero ── */}
-        <section className="border-b border-border">
+        <section>
           <div className="mx-auto max-w-7xl px-6 pt-24 pb-16 sm:pt-32 sm:pb-20 lg:pt-40 lg:pb-24">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
@@ -131,18 +148,18 @@ export default function Home() {
               </div>
 
               {/* Right — copy */}
-              <div className="text-left">
+              <div className="text-center lg:text-left">
                 <div className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted">
                   <Zap className="h-3 w-3 text-blue-500" />
                   Developer-first authentication
                 </div>
-                <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-4xl max-w-2xl leading-tight">
+                <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-4xl leading-tight">
                   Authentication infrastructure that <span className="text-blue-500">scales with your product</span>.
                 </h1>
-                <p className="mt-5 text-lg leading-relaxed text-muted max-w-lg">
+                <p className="mt-5 text-lg leading-relaxed text-muted">
                   SecureGate handles signup flows, email verification, password recovery, session protection, and route security so developers can ship faster with fewer auth headaches.
                 </p>
-                <div className="mt-10 flex items-center gap-4">
+                <div className="mt-10 flex items-center justify-center lg:justify-start gap-4">
                   <Link
                     href="/signup"
                     className="inline-flex items-center gap-2 rounded-lg bg-blue-500 px-6 py-3 text-sm font-semibold text-accent-foreground transition-colors hover:bg-blue-600 shadow-sm"
@@ -163,8 +180,10 @@ export default function Home() {
           </div>
         </section>
 
+        <SectionDivider />
+
         {/* ── Stats bar ── */}
-        <section className="border-b border-border py-14">
+        <section className="py-14">
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
               {[
@@ -182,8 +201,10 @@ export default function Home() {
           </div>
         </section>
 
+        <SectionDivider />
+
         {/* ── How It Works ── */}
-        <section className="border-b border-border py-24">
+        <section className="py-24">
           <div className="mx-auto max-w-7xl px-6">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="text-3xl font-bold tracking-tight text-foreground">
@@ -227,8 +248,10 @@ export default function Home() {
           </div>
         </section>
 
+        <SectionDivider />
+
         {/* ── Authentication Features ── */}
-        <section className="border-b border-border py-24">
+        <section className="py-24">
           <div className="mx-auto max-w-7xl px-6">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="text-3xl font-bold tracking-tight text-foreground">
@@ -288,8 +311,10 @@ export default function Home() {
           </div>
         </section>
 
+        <SectionDivider />
+
         {/* ── Security & Trust ── */}
-        <section className="border-b border-border py-24">
+        <section className="py-24">
           <div className="mx-auto max-w-7xl px-6">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="text-3xl font-bold tracking-tight text-foreground">
@@ -341,8 +366,10 @@ export default function Home() {
           </div>
         </section>
 
+        <SectionDivider />
+
         {/* ── Integration / Stack ── */}
-        <section className="border-b border-border py-24">
+        <section className="py-24">
           <div className="mx-auto max-w-7xl px-6">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="text-3xl font-bold tracking-tight text-foreground">
@@ -367,6 +394,8 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <SectionDivider />
 
         {/* ── Final CTA ── */}
         <section className="py-24">
