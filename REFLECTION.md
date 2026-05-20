@@ -28,8 +28,7 @@ I learned that authentication systems depend heavily on configuration. A small i
 ### Q1 - Murphy's Law
 
 **Code reference:** `middleware.ts`, `app/api/signup/route.ts`
-
-**My Answer:**  
+ 
 Murphy’s Law affected my authentication flow and dashboard protection. In `middleware.ts`, I added protection so users without a valid session cannot access `/dashboard`. Without this, users could manually enter protected routes.
 
 It also affected the signup flow in `app/api/signup/route.ts`. I added checks for existing users before creating accounts. Without that validation, duplicate accounts using the same email could break authentication logic.
@@ -43,7 +42,6 @@ Users could access protected pages without logging in or create conflicting acco
 
 **Code reference:** `middleware.ts`, `auth.ts`
 
-**My Answer:**  
 NextAuth simplified authentication, but I still had to understand how sessions and middleware work underneath. Route protection only worked correctly after understanding how NextAuth validates sessions.
 
 The abstraction leaked because I could not rely only on the package defaults. I still had to debug redirects, session handling, and authentication state manually.
@@ -57,7 +55,6 @@ Authentication may appear correct visually while protected routes remain exposed
 
 **Code reference:** Entire project scope
 
-**My Answer:**  
 I intentionally avoided adding features like social login, multi-factor authentication, and audit dashboards because they were outside the project requirements.
 
 The core goal was building a secure authentication flow that works correctly. Adding too many extra features would have increased debugging time and complexity.
@@ -71,7 +68,6 @@ The project becomes harder to maintain and more likely to contain unfinished or 
 
 **Code reference:** `app/api/signup/route.ts`
 
-**My Answer:**  
 Passwords are hashed using bcrypt before storage. bcrypt automatically generates a salt so identical passwords do not produce identical hashes.
 
 If I stored SHA-256 hashes directly instead, attackers could use rainbow tables or brute force attacks more easily because SHA-256 is too fast for password storage.
@@ -85,7 +81,6 @@ Leaked passwords become easier to crack and user accounts become vulnerable.
 
 **Code reference:** `app/api/forgot-password/route.ts`
 
-**My Answer:**  
 The forgot password endpoint returns the same success message even when the email does not exist. This prevents attackers from checking which emails are registered in the system.
 
 The API stays conservative with the information it reveals.
@@ -98,8 +93,7 @@ Attackers could enumerate valid user emails and target real accounts.
 ### Q6 - Boy Scout Rule
 
 **Code reference:** `auth.ts`
-
-**My Answer:**  
+ 
 While working on login validation, I cleaned up repeated authentication checks and removed unnecessary logic that was left from earlier debugging.
 
 I also improved the password validation flow so failed logins return clean responses instead of confusing errors.
@@ -112,8 +106,7 @@ Unused or messy logic makes debugging harder later and increases the chance of h
 ### Q7 - Gall's Law
 
 **Code reference:** Entire project structure
-
-**My Answer:**  
+ 
 SecureGate grew phase by phase. I started with basic signup and login before adding email verification, password reset, middleware protection, and rate limiting.
 
 Building everything at once would have made debugging difficult because multiple systems would fail at the same time.
@@ -126,8 +119,7 @@ Complex bugs become harder to isolate and the system becomes unstable faster.
 ### Q8 - Prisma and Database Structure
 
 **Code reference:** `prisma/schema.prisma`
-
-**My Answer:**  
+  
 The Prisma schema is an abstraction over the real PostgreSQL database structure. Prisma models look simple, but the database still creates indexes, IDs, and relational structures underneath.
 
 For example, Prisma handles generated IDs automatically even though the actual database stores them differently internally.
@@ -141,7 +133,6 @@ Database migrations can fail or relationships may break unexpectedly.
 
 **Code reference:** `lib/rate-limit.ts`
 
-**My Answer:**  
 Rate limiting was not built into the authentication flow automatically, so I added Upstash Redis manually. This kept the authentication logic focused while adding extra protection separately.
 
 This follows good separation of concerns instead of forcing every responsibility into one system.
@@ -155,7 +146,6 @@ Applications grow into large systems with unclear responsibilities and become ha
 
 **Code reference:** Login form and auth flow
 
-**My Answer:**  
 When login credentials are incorrect, the UI shows a clear and predictable error message instead of exposing technical errors.
 
 Users expect authentication forms to explain failures simply without revealing sensitive information.
@@ -169,7 +159,6 @@ Confusing error messages reduce trust and may expose internal system details.
 
 **Code reference:** `middleware.ts`
 
-**My Answer:**  
 The middleware checks whether a valid session exists before allowing access to protected routes. If a user deletes their session cookie manually, the middleware detects the missing session and redirects them back to login.
 
 The app assumes users may break or manipulate sessions.
@@ -183,7 +172,6 @@ Unauthorized users may gain access to protected routes.
 
 **Code reference:** `.env.local`, Vercel environment variables
 
-**My Answer:**  
 Sensitive keys like `NEXTAUTH_SECRET`, `DATABASE_URL`, and `RESEND_API_KEY` are stored in environment variables instead of hardcoded into the project.
 
 If `NEXTAUTH_SECRET` were pushed to GitHub accidentally, I would rotate the secret immediately, update Vercel variables, and redeploy the app.
@@ -197,7 +185,6 @@ Attackers could forge sessions or gain access to protected services.
 
 **Code reference:** Project folder structure
 
-**My Answer:**  
 The project structure reflects how I think about the system. Authentication routes, middleware, database models, and UI components are separated by responsibility.
 
 This made debugging easier because related logic stayed grouped together.
@@ -211,7 +198,6 @@ The codebase becomes harder to navigate and maintain as the project grows.
 
 **Code reference:** Landing page components
 
-**My Answer:**  
 One piece of technical debt is that some landing page sections still contain repeated UI patterns instead of reusable components.
 
 Right now it works, but scaling the design system would become harder because updates would need to be repeated manually across sections.
@@ -224,8 +210,7 @@ UI maintenance becomes slower and inconsistencies appear across the application.
 ### Q15 - Adding Flutterwave Payments
 
 **Code reference:** Future system architecture
-
-**My Answer:**  
+ 
 If Flutterwave payments were added, I would create secure payment routes on the backend instead of handling payment verification only on the frontend.
 
 The system would need webhook validation, secure transaction storage, protected premium routes, and database updates tied to verified payments.
