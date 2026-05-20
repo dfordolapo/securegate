@@ -10,8 +10,8 @@ export function ThreatMonitor() {
         </div>
         <Activity className="h-4 w-4 text-blue-500" />
       </div>
-      <div className="p-5 flex flex-col justify-center h-[300px]">
-        <div className="flex items-end justify-between h-48 w-full gap-2 px-2">
+      <div className="p-5 flex flex-col justify-center min-h-[200px] sm:min-h-[300px]">
+        <div className="flex items-end justify-between h-32 sm:h-48 w-full gap-1 sm:gap-2 px-2">
           {[30, 45, 25, 60, 40, 85, 35, 50, 20, 65, 45, 70, 30].map((height, i) => (
             <div key={i} className="w-full relative group h-full flex flex-col justify-end">
               <div

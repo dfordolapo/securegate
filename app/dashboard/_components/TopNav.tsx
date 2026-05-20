@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Bell, Search, User, X, CheckCircle2, AlertTriangle, ShieldAlert, LogOut, Settings as SettingsIcon } from "lucide-react";
+import { Bell, Search, User, X, CheckCircle2, AlertTriangle, ShieldAlert, LogOut, Settings as SettingsIcon, Menu } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
@@ -20,7 +20,7 @@ const navigationItems = [
   { name: 'Settings', href: '/dashboard/settings' },
 ];
 
-export function TopNav() {
+export function TopNav({ onToggleSidebar }: { onToggleSidebar: () => void }) {
   const { data: session } = useSession();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -55,6 +55,13 @@ export function TopNav() {
   return (
     <header className="sticky top-0 z-30 flex h-14 shrink-0 bg-card border-b border-border">
       <div className="flex flex-1 items-center justify-between px-6">
+        <button
+          onClick={onToggleSidebar}
+          className="lg:hidden mr-3 rounded-lg p-2 text-muted hover:text-foreground hover:bg-foreground/5 transition-colors outline-none"
+          aria-label="Toggle sidebar"
+        >
+          <Menu className="h-4 w-4" />
+        </button>
         <div className="flex flex-1">
           <div className="relative w-full max-w-md" ref={searchRef}>
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -125,7 +132,7 @@ export function TopNav() {
             </button>
 
             {showNotifications && (
-              <div className="absolute right-0 top-full mt-2 w-80 rounded-xl border border-border bg-card shadow-lg overflow-hidden flex flex-col origin-top-right">
+              <div className="absolute right-0 sm:right-0 top-full mt-2 w-80 max-w-[calc(100vw-2rem)] rounded-xl border border-border bg-card shadow-lg overflow-hidden flex flex-col origin-top-right">
                 <div className="px-4 py-3 border-b border-border flex justify-between items-center">
                   <h3 className="text-sm font-semibold text-foreground">Notifications</h3>
                   <button className="text-xs text-blue-400 hover:text-blue-300 font-medium transition-colors">Mark all as read</button>
@@ -165,11 +172,11 @@ export function TopNav() {
               <div className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-500/10 text-blue-400">
                 <User className="h-3.5 w-3.5" />
               </div>
-              <span className="text-sm font-medium text-foreground">{session?.user?.name || "Admin"}</span>
+              <span className="hidden sm:inline text-sm font-medium text-foreground">{session?.user?.name || "Admin"}</span>
             </button>
 
             {showProfileMenu && (
-              <div className="absolute right-0 top-full mt-2 w-56 rounded-xl border border-border bg-card shadow-lg overflow-hidden flex flex-col origin-top-right">
+              <div className="absolute right-0 sm:right-0 top-full mt-2 w-56 max-w-[calc(100vw-2rem)] rounded-xl border border-border bg-card shadow-lg overflow-hidden flex flex-col origin-top-right">
                 <div className="px-4 py-3 border-b border-border">
                   <p className="text-sm font-medium text-foreground">{session?.user?.name || "User"}</p>
                   <p className="text-xs text-muted truncate">{session?.user?.email || ""}</p>
