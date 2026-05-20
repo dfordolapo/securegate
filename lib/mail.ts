@@ -9,7 +9,7 @@ export async function sendVerificationEmail(
     token: string
 ) {
     const verificationLink =
-        `${process.env.NEXTAUTH_URL}/verify-email?token=${token}`;
+        `${process.env.NEXTAUTH_URL}/verify-email/${token}`;
 
     await resend.emails.send({
         from: process.env.EMAIL_FROM!,
@@ -26,7 +26,7 @@ export async function sendPasswordResetEmail(
     token: string
 ) {
     const resetLink =
-        `${process.env.NEXTAUTH_URL}/reset-password?token=${token}`;
+        `${process.env.NEXTAUTH_URL}/reset-password/${token}`;
 
     await resend.emails.send({
         from: process.env.EMAIL_FROM!,

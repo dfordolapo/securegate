@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { LayoutDashboard, ShieldAlert, Activity, UserCheck, Settings, LogOut } from "lucide-react";
 
 const navigation = [
@@ -14,6 +14,7 @@ const navigation = [
 ];
 
 export function Sidebar() {
+  const { data: session } = useSession();
   const pathname = usePathname();
 
   return (
@@ -48,7 +49,13 @@ export function Sidebar() {
           })}
         </nav>
       </div>
-      <div className="p-4 mt-auto border-t border-white/5">
+      <div className="p-4 border-t border-white/5 space-y-2">
+        {session?.user && (
+          <div className="px-3 py-2">
+            <p className="text-sm font-medium text-sidebar-foreground truncate">{session.user.name || "User"}</p>
+            <p className="text-xs text-sidebar-foreground/50 truncate">{session.user.email || ""}</p>
+          </div>
+        )}
         <button 
           onClick={() => signOut({ callbackUrl: '/login' })}
           className="flex items-center w-full px-3 py-2.5 text-sm font-medium text-sidebar-foreground/70 rounded-lg hover:bg-white/5 hover:text-sidebar-foreground transition-all group"

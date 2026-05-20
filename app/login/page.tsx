@@ -25,7 +25,7 @@ export default function LoginPage() {
         });
 
         if (result?.error) {
-            setError("That email and password combination doesn't match our records.");
+            setError(result.error);
             setIsPending(false);
             return;
         }

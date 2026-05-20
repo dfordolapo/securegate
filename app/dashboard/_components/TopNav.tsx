@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { Bell, Search, User, X, CheckCircle2, AlertTriangle, ShieldAlert, LogOut, Settings as SettingsIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 const mockNotifications = [
   { id: 1, title: 'New Device Detected', desc: 'A new Mac was logged in from Austin, TX.', time: '5m ago', icon: AlertTriangle, unread: true, type: 'warning' },
@@ -21,6 +21,7 @@ const navigationItems = [
 ];
 
 export function TopNav() {
+  const { data: session } = useSession();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -167,15 +168,15 @@ export function TopNav() {
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent/10 text-accent">
                 <User className="h-4 w-4" />
               </div>
-              <span className="text-sm font-medium text-foreground">Admin</span>
+              <span className="text-sm font-medium text-foreground">{session?.user?.name || "Admin"}</span>
             </button>
 
             {/* Profile Dropdown */}
             {showProfileMenu && (
               <div className="absolute right-0 top-full mt-2 w-56 rounded-xl bg-card border border-border shadow-lg overflow-hidden flex flex-col origin-top-right">
                 <div className="px-4 py-3 border-b border-border bg-background/50">
-                  <p className="text-sm font-medium text-foreground">Admin User</p>
-                  <p className="text-xs text-foreground/60 truncate">admin@securegate.com</p>
+                  <p className="text-sm font-medium text-foreground">{session?.user?.name || "User"}</p>
+                  <p className="text-xs text-foreground/60 truncate">{session?.user?.email || ""}</p>
                 </div>
                 <div className="py-1">
                   <Link 
