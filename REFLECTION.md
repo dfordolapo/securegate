@@ -306,4 +306,4 @@ This project changed how I think about authentication and production systems.
 
 Before this project, I focused mostly on frontend behavior. During this project, I spent much more time thinking about middleware, sessions, deployment issues, environment variables, database configuration, and security.
 
-I also learned that production environments expose problems that do not always appear locally. Testing on Vercel became just as important as testing on localhost.I also learned that production environments expose problems that do not always appear locally. Testing on Vercel became just as important as testing on localhost.
+I also learned that production environments expose problems that do not always appear locally. Testing on Vercel became just as important as testing on localhost.
