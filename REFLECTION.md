@@ -1,6 +1,6 @@
 # SecureGate - Reflection & Engineering Analysis
 
-**Name:** Dolapo  
+**Name:** Dolapo Oyekanmi 
 **Cohort:** Design to MVP Bootcamp  
 **Live URL:** https://securegateco.vercel.app/
 **GitHub Repo:** https://github.com/dfordolapo/securegate/
