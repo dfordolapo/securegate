@@ -92,15 +92,15 @@ Attackers could enumerate valid user emails and target real accounts.
 
 ### Q6 - Boy Scout Rule
 
-**Code reference:** `auth.ts`
- 
-While working on login validation, I cleaned up repeated authentication checks and removed unnecessary logic that was left from earlier debugging.
+**Code reference: app/api/forgot-password/route.ts, auth.ts
 
-I also improved the password validation flow so failed logins return clean responses instead of confusing errors.
+While debugging authentication, I noticed repeated user lookup and validation logic across multiple routes. Both the login flow and forgot-password flow were querying users with similar checks before continuing.
 
-**What goes wrong if ignored:**  
-Unused or messy logic makes debugging harder later and increases the chance of hidden bugs.
+I cleaned this up by moving shared authentication-related logic into reusable helpers instead of repeating Prisma queries and validation in multiple route handlers.
 
+I also simplified the error handling so routes returned consistent responses instead of different messages depending on where the validation failed.
+
+If I ignored this cleanup, authentication logic could drift over time and different routes might handle the same user state differently.
 ---
 
 ### Q7 - Gall's Law
@@ -118,28 +118,32 @@ Complex bugs become harder to isolate and the system becomes unstable faster.
 
 ### Q8 - Prisma and Database Structure
 
-**Code reference:** `prisma/schema.prisma`
-  
-The Prisma schema is an abstraction over the real PostgreSQL database structure. Prisma models look simple, but the database still creates indexes, IDs, and relational structures underneath.
+**Code reference: prisma/schema.prisma
 
-For example, Prisma handles generated IDs automatically even though the actual database stores them differently internally.
+Prisma simplified database interactions, but it also hid some database behavior behind abstractions.
 
-**What goes wrong if ignored:**  
-Database migrations can fail or relationships may break unexpectedly.
+For example, in schema.prisma:id String @id @default(cuid()) looks like the database generates the ID automatically, but PostgreSQL itself does not natively create cuid() values. Prisma generates the ID in the application layer before inserting the record into PostgreSQL.
 
+The same thing happens with fields like @updatedAt. Prisma automatically updates the timestamp during writes, but PostgreSQL is not directly managing that logic.
+
+This mattered during deployment because the app worked locally with SQLite but failed on Vercel until I switched the datasource provider to PostgreSQL and updated the environment configuration correctly.
+
+If I ignored the abstraction layer completely, I could make incorrect assumptions about how the database actually behaves underneath Prisma.
 ---
 
 ### Q9 - Zawinski's Law
 
-**Code reference:** `lib/rate-limit.ts`
+**Code reference: lib/rate-limit.ts, middleware.ts
 
-Rate limiting was not built into the authentication flow automatically, so I added Upstash Redis manually. This kept the authentication logic focused while adding extra protection separately.
+Authentication and abuse prevention were separated intentionally.
 
-This follows good separation of concerns instead of forcing every responsibility into one system.
+NextAuth handled authentication and sessions, while Upstash Redis handled rate limiting separately through lib/rate-limit.ts.
 
-**What goes wrong if ignored:**  
-Applications grow into large systems with unclear responsibilities and become harder to secure.
+I avoided placing throttling logic directly inside authentication handlers because authentication already had enough responsibilities including password validation, session handling, redirects, and token management.
 
+Keeping rate limiting isolated made the system easier to debug and maintain. It also allowed middleware and auth routes to stay focused on access control rather than traffic management.
+
+If I pushed every responsibility into the authentication layer, the codebase would become harder to reason about and much more fragile during debugging.
 ---
 
 ### Q10 - Principle of Least Surprise
@@ -209,14 +213,18 @@ UI maintenance becomes slower and inconsistencies appear across the application.
 
 ### Q15 - Adding Flutterwave Payments
 
-**Code reference:** Future system architecture
- 
-If Flutterwave payments were added, I would create secure payment routes on the backend instead of handling payment verification only on the frontend.
+**Code reference: Future architecture extension
 
-The system would need webhook validation, secure transaction storage, protected premium routes, and database updates tied to verified payments.
+If Flutterwave payments were added, payment verification would happen on the backend instead of trusting frontend responses.
 
-**What goes wrong if ignored:**  
-Users could fake payment states or access premium features without successful transactions.
+I would create a dedicated route such as:app/api/payments/verify/route.ts
+The frontend would redirect users to Flutterwave checkout, and Flutterwave webhooks would notify the backend after payment completion.
+
+The backend would then verify the transaction securely using the Flutterwave secret key stored in environment variables before updating subscription status in PostgreSQL.
+
+Middleware would protect premium routes by checking the user subscription state before granting access.
+
+If payment verification happened only on the frontend, users could fake successful payments by modifying requests manually and gain unauthorized access to premium features.
 
 ---
 
