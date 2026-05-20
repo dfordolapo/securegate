@@ -36,12 +36,12 @@ export const authOptions: NextAuthOptions = {
 
                 if (!allowed) {
                     throw new Error(
-                        "Too many login attempts. Try again later."
+                        "Too many login attempts. Please wait a moment and try again."
                     );
                 }
 
                 if (!credentials?.email || !credentials?.password) {
-                    return null;
+                    throw new Error("Please enter both your email and password to log in.");
                 }
 
                 const user = await prisma.user.findUnique({
@@ -51,7 +51,7 @@ export const authOptions: NextAuthOptions = {
                 });
 
                 if (!user) {
-                    return null;
+                    throw new Error("Invalid email or password. Please check your credentials and try again.");
                 }
 
                 const passwordMatch = await compare(
@@ -60,11 +60,11 @@ export const authOptions: NextAuthOptions = {
                 );
 
                 if (!passwordMatch) {
-                    return null;
+                    throw new Error("Invalid email or password. Please check your credentials and try again.");
                 }
 
                 if (!user.emailVerified) {
-                    throw new Error("Please verify your email before logging in");
+                    throw new Error("Please verify your email address before logging in. Check your inbox for the verification link.");
                 }
                 return {
                     id: user.id,

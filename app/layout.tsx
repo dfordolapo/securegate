@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SecureGate | Dashboard",
-  description: "SecureGate Security Management Dashboard",
+  title: "SecureGate | Enterprise Access Security",
+  description: "Authentication, authorization, and threat monitoring for modern applications.",
 };
 
 export default function RootLayout({

@@ -48,22 +48,22 @@ export function TopNav() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const filteredItems = navigationItems.filter(item => 
+  const filteredItems = navigationItems.filter(item =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 flex-shrink-0 bg-card/80 backdrop-blur-md border-b border-border shadow-sm">
+    <header className="sticky top-0 z-30 flex h-14 shrink-0 bg-card border-b border-border">
       <div className="flex flex-1 items-center justify-between px-6">
         <div className="flex flex-1">
           <div className="relative w-full max-w-md" ref={searchRef}>
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-              <Search className="h-4 w-4 text-foreground/40" aria-hidden="true" />
+              <Search className="h-4 w-4 text-muted" aria-hidden="true" />
             </div>
             <input
               id="search"
               name="search"
-              className="block w-full rounded-full border border-border/50 bg-background/50 py-2 pl-10 pr-10 text-foreground placeholder:text-foreground/40 focus:bg-background focus:border-accent focus:ring-1 focus:ring-accent sm:text-sm sm:leading-6 transition-all"
+              className="block w-full rounded-lg border border-border bg-background py-2 pl-10 pr-10 text-sm text-foreground placeholder-neutral-500 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
               placeholder="Search dashboard..."
               type="text"
               value={searchQuery}
@@ -74,17 +74,16 @@ export function TopNav() {
               onFocus={() => setShowSearchResults(true)}
             />
             {searchQuery && (
-              <button 
+              <button
                 onClick={() => { setSearchQuery(''); setShowSearchResults(false); }}
-                className="absolute inset-y-0 right-0 flex items-center pr-3 text-foreground/40 hover:text-foreground"
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted hover:text-foreground"
               >
                 <X className="h-4 w-4" />
               </button>
             )}
-            
-            {/* Search Dropdown */}
+
             {showSearchResults && searchQuery && (
-              <div className="absolute top-full left-0 right-0 mt-2 rounded-xl bg-card border border-border shadow-lg overflow-hidden py-2">
+              <div className="absolute top-full left-0 right-0 mt-2 rounded-xl border border-border bg-card shadow-lg overflow-hidden py-2">
                 {filteredItems.length > 0 ? (
                   <ul className="max-h-60 overflow-auto">
                     {filteredItems.map(item => (
@@ -95,7 +94,7 @@ export function TopNav() {
                             setSearchQuery('');
                             setShowSearchResults(false);
                           }}
-                          className="w-full text-left px-4 py-2 text-sm text-foreground hover:bg-background/80 transition-colors"
+                          className="w-full text-left px-4 py-2 text-sm text-foreground hover:bg-background transition-colors"
                         >
                           {item.name}
                         </button>
@@ -103,103 +102,100 @@ export function TopNav() {
                     ))}
                   </ul>
                 ) : (
-                  <div className="px-4 py-3 text-sm text-foreground/60 text-center">
-                    No results found for "{searchQuery}"
+                  <div className="px-4 py-3 text-sm text-muted text-center">
+                    No results found for &quot;{searchQuery}&quot;
                   </div>
                 )}
               </div>
             )}
           </div>
         </div>
-        
-        <div className="ml-4 flex items-center md:ml-6 gap-4">
+
+        <div className="ml-4 flex items-center gap-4">
           <div className="relative" ref={notifRef}>
             <button
               type="button"
               onClick={() => setShowNotifications(!showNotifications)}
-              className={`relative rounded-full p-2 transition-colors focus:outline-none focus:ring-2 focus:ring-accent ${showNotifications ? 'bg-black/5 text-foreground' : 'text-foreground/60 hover:text-foreground hover:bg-black/5'}`}
+              className={`relative rounded-lg p-2 transition-colors outline-none ${showNotifications ? 'bg-foreground/5 text-foreground' : 'text-muted hover:text-foreground hover:bg-foreground/5'}`}
             >
-              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow-sm ring-2 ring-card">
+              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-blue-500 text-[10px] font-bold text-accent-foreground shadow-sm ring-2 ring-card">
                 2
               </span>
-              <span className="sr-only">View notifications</span>
-              <Bell className="h-5 w-5" aria-hidden="true" />
+              <Bell className="h-4 w-4" />
             </button>
 
-            {/* Notifications Dropdown */}
             {showNotifications && (
-              <div className="absolute right-0 top-full mt-2 w-80 rounded-xl bg-card border border-border shadow-lg overflow-hidden flex flex-col origin-top-right">
-                <div className="px-4 py-3 border-b border-border bg-background/50 flex justify-between items-center">
+              <div className="absolute right-0 top-full mt-2 w-80 rounded-xl border border-border bg-card shadow-lg overflow-hidden flex flex-col origin-top-right">
+                <div className="px-4 py-3 border-b border-border flex justify-between items-center">
                   <h3 className="text-sm font-semibold text-foreground">Notifications</h3>
-                  <button className="text-xs text-accent hover:text-accent/80 font-medium transition-colors">Mark all as read</button>
+                  <button className="text-xs text-blue-400 hover:text-blue-300 font-medium transition-colors">Mark all as read</button>
                 </div>
                 <div className="max-h-80 overflow-y-auto">
                   {mockNotifications.map((notif) => (
-                    <div key={notif.id} className={`px-4 py-3 border-b border-border/50 last:border-0 hover:bg-background/50 transition-colors cursor-pointer flex gap-3 ${notif.unread ? 'bg-accent/5' : ''}`}>
-                      <div className={`mt-0.5 rounded-full p-1.5 h-fit ${
-                        notif.type === 'critical' ? 'bg-rose-500/10 text-rose-500' :
-                        notif.type === 'warning' ? 'bg-amber-500/10 text-amber-500' :
-                        'bg-emerald-500/10 text-emerald-500'
+                    <div key={notif.id} className={`px-4 py-3 border-b border-border/50 last:border-0 hover:bg-background transition-colors cursor-pointer flex gap-3 ${notif.unread ? 'bg-blue-500/5' : ''}`}>
+                      <div className={`mt-0.5 rounded-lg p-1.5 h-fit ${
+                        notif.type === 'critical' ? 'bg-red-500/10 text-red-400' :
+                        notif.type === 'warning' ? 'bg-amber-500/10 text-amber-400' :
+                        'bg-accent/10 text-accent'
                       }`}>
                         <notif.icon className="h-4 w-4" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-start">
                           <p className={`text-sm font-medium ${notif.unread ? 'text-foreground' : 'text-foreground/80'}`}>{notif.title}</p>
-                          <span className="text-xs text-foreground/50 whitespace-nowrap ml-2">{notif.time}</span>
+                          <span className="text-xs text-muted whitespace-nowrap ml-2">{notif.time}</span>
                         </div>
-                        <p className="text-xs text-foreground/60 mt-1 line-clamp-2">{notif.desc}</p>
+                        <p className="text-xs text-muted mt-1 line-clamp-2">{notif.desc}</p>
                       </div>
                     </div>
                   ))}
                 </div>
-                <div className="px-4 py-2 border-t border-border bg-background/50 text-center hover:bg-background transition-colors cursor-pointer">
-                  <button className="text-xs font-medium text-foreground/60 hover:text-foreground">View all notifications</button>
+                <div className="px-4 py-2 border-t border-border text-center hover:bg-background transition-colors cursor-pointer">
+                  <button className="text-xs font-medium text-muted hover:text-foreground">View all notifications</button>
                 </div>
               </div>
             )}
           </div>
 
-          <div className="relative ml-1" ref={profileRef}>
-            <button 
+          <div className="relative" ref={profileRef}>
+            <button
               onClick={() => setShowProfileMenu(!showProfileMenu)}
-              className={`flex items-center gap-2 rounded-full p-1 pr-3 transition-colors focus:outline-none focus:ring-2 focus:ring-accent ${showProfileMenu ? 'bg-black/5' : 'hover:bg-black/5'}`}
+              className={`flex items-center gap-2 rounded-lg p-1.5 pr-3 transition-colors outline-none ${showProfileMenu ? 'bg-foreground/5' : 'hover:bg-foreground/5'}`}
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent/10 text-accent">
-                <User className="h-4 w-4" />
+              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-500/10 text-blue-400">
+                <User className="h-3.5 w-3.5" />
               </div>
               <span className="text-sm font-medium text-foreground">{session?.user?.name || "Admin"}</span>
             </button>
 
-            {/* Profile Dropdown */}
             {showProfileMenu && (
-              <div className="absolute right-0 top-full mt-2 w-56 rounded-xl bg-card border border-border shadow-lg overflow-hidden flex flex-col origin-top-right">
-                <div className="px-4 py-3 border-b border-border bg-background/50">
+              <div className="absolute right-0 top-full mt-2 w-56 rounded-xl border border-border bg-card shadow-lg overflow-hidden flex flex-col origin-top-right">
+                <div className="px-4 py-3 border-b border-border">
                   <p className="text-sm font-medium text-foreground">{session?.user?.name || "User"}</p>
-                  <p className="text-xs text-foreground/60 truncate">{session?.user?.email || ""}</p>
+                  <p className="text-xs text-muted truncate">{session?.user?.email || ""}</p>
                 </div>
                 <div className="py-1">
-                  <Link 
-                    href="/dashboard/settings" 
+                  <Link
+                    href="/dashboard/settings"
                     onClick={() => setShowProfileMenu(false)}
-                    className="flex items-center px-4 py-2 text-sm text-foreground hover:bg-background/80 transition-colors"
+                    className="flex items-center px-4 py-2 text-sm text-foreground hover:bg-background transition-colors"
                   >
-                    <User className="mr-3 h-4 w-4 text-foreground/60" />
+                    <User className="mr-3 h-4 w-4 text-muted" />
                     Profile
                   </Link>
-                  <Link 
-                    href="/dashboard/settings" 
+                  <Link
+                    href="/dashboard/settings"
                     onClick={() => setShowProfileMenu(false)}
-                    className="flex items-center px-4 py-2 text-sm text-foreground hover:bg-background/80 transition-colors"
+                    className="flex items-center px-4 py-2 text-sm text-foreground hover:bg-background transition-colors"
                   >
-                    <SettingsIcon className="mr-3 h-4 w-4 text-foreground/60" />
+                    <SettingsIcon className="mr-3 h-4 w-4 text-muted" />
                     Settings
                   </Link>
                 </div>
                 <div className="py-1 border-t border-border">
-                  <button 
+                  <button
                     onClick={() => signOut({ callbackUrl: '/login' })}
-                    className="flex w-full items-center px-4 py-2 text-sm font-medium text-rose-500 hover:bg-rose-500/10 transition-colors"
+                    className="flex w-full items-center px-4 py-2 text-sm font-medium text-red-400 hover:bg-red-500/10 transition-colors"
                   >
                     <LogOut className="mr-3 h-4 w-4" />
                     Sign Out

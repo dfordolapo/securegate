@@ -5,15 +5,15 @@ import { AuthStatus } from "./_components/AuthStatus";
 
 export default function DashboardPage() {
   return (
-    <div className="space-y-8 pb-8">
+    <div className="space-y-6 pb-8">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">Security Dashboard</h1>
-        <p className="text-sm text-foreground/60 mt-1">Monitor, analyze, and protect your infrastructure.</p>
+        <h1 className="text-xl font-bold tracking-tight text-foreground">Security Dashboard</h1>
+        <p className="text-sm text-muted mt-0.5">Monitor, analyze, and protect your infrastructure.</p>
       </div>
 
       <OverviewCards />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <div className="lg:col-span-2">
           <ThreatMonitor />
         </div>
@@ -22,10 +22,8 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="lg:col-span-2">
-          <ActivityFeed />
-        </div>
+      <div className="grid grid-cols-1 gap-5">
+        <ActivityFeed />
       </div>
     </div>
   );

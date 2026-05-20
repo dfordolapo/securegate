@@ -10,43 +10,43 @@ export default function ActivityLogPage() {
   ];
 
   return (
-    <div className="space-y-8 pb-8">
+    <div className="space-y-6 pb-8">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">Activity Log</h1>
-        <p className="text-sm text-foreground/60 mt-1">Detailed history of system and user events.</p>
+        <h1 className="text-xl font-bold tracking-tight text-foreground">Activity Log</h1>
+        <p className="text-sm text-muted mt-0.5">Detailed history of system and user events.</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <div className="lg:col-span-1">
           <ActivityFeed />
         </div>
         <div className="lg:col-span-2">
-          <div className="rounded-xl bg-card border border-border shadow-sm overflow-hidden h-full">
-            <div className="p-6 border-b border-border flex justify-between items-center">
-              <h3 className="text-base font-semibold leading-6 text-foreground">Detailed Event Logs</h3>
-              <button className="text-sm text-accent hover:text-accent/80 font-medium">Export CSV</button>
+          <div className="rounded-xl border border-border bg-card overflow-hidden h-full">
+            <div className="px-5 py-4 border-b border-border flex justify-between items-center">
+              <h3 className="text-sm font-semibold text-foreground">Detailed Event Logs</h3>
+              <button className="text-xs text-blue-400 hover:text-blue-300 font-medium">Export CSV</button>
             </div>
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-border/50">
-                <thead className="bg-background/50">
+                <thead className="bg-background/30">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-foreground/60 uppercase tracking-wider">Event</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-foreground/60 uppercase tracking-wider">User</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-foreground/60 uppercase tracking-wider">IP Address</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-foreground/60 uppercase tracking-wider">Date/Time</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-foreground/60 uppercase tracking-wider">Status</th>
+                    <th className="px-5 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Event</th>
+                    <th className="px-5 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">User</th>
+                    <th className="px-5 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">IP Address</th>
+                    <th className="px-5 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Date/Time</th>
+                    <th className="px-5 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">Status</th>
                   </tr>
                 </thead>
-                <tbody className="bg-card divide-y divide-border/50">
+                <tbody className="divide-y divide-border/50">
                   {logs.map((log) => (
-                    <tr key={log.id} className="hover:bg-background/50 transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">{log.event}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground/80">{log.user}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-foreground/60">{log.ip}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground/60">{log.date}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset ${
-                          log.status === 'Success' ? 'bg-emerald-50 text-emerald-700 ring-emerald-600/20' : 'bg-rose-50 text-rose-700 ring-rose-600/20'
+                    <tr key={log.id} className="hover:bg-background/30 transition-colors">
+                      <td className="px-5 py-4 whitespace-nowrap text-sm font-medium text-foreground">{log.event}</td>
+                      <td className="px-5 py-4 whitespace-nowrap text-sm text-foreground/80">{log.user}</td>
+                      <td className="px-5 py-4 whitespace-nowrap text-sm font-mono text-muted">{log.ip}</td>
+                      <td className="px-5 py-4 whitespace-nowrap text-sm text-muted">{log.date}</td>
+                      <td className="px-5 py-4 whitespace-nowrap text-sm">
+                        <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset ${
+                          log.status === 'Success' ? 'bg-accent/10 text-accent ring-accent/30' : 'bg-red-500/10 text-red-400 ring-red-500/30'
                         }`}>
                           {log.status}
                         </span>

@@ -8,14 +8,14 @@ export async function POST(req: Request) {
 
         if (!token || !password) {
             return NextResponse.json(
-                { error: "Missing required fields." },
+                { error: "We need both your reset token and a new password to continue." },
                 { status: 400 }
             );
         }
 
         if (password.length < 8) {
             return NextResponse.json(
-                { error: "Password must be at least 8 characters." },
+                { error: "Your new password needs to be at least 8 characters long." },
                 { status: 400 }
             );
         }
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
 
         if (!resetToken) {
             return NextResponse.json(
-                { error: "Invalid password reset token." },
+                { error: "This reset link isn't valid. It may have already been used or might be incorrect." },
                 { status: 400 }
             );
         }
@@ -50,13 +50,13 @@ export async function POST(req: Request) {
         });
 
         return NextResponse.json(
-            { message: "Your password has been successfully updated. You can now log in." },
+            { message: "Your password has been updated. Head to the login page to sign in." },
             { status: 200 }
         );
     } catch (error) {
         console.error("RESET PASSWORD ERROR:", error);
         return NextResponse.json(
-            { error: "We encountered an unexpected issue while resetting your password. Please try again." },
+            { error: "Something went wrong while resetting your password. Please try again." },
             { status: 500 }
         );
     }

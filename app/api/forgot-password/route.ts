@@ -9,7 +9,7 @@ export async function POST(req: Request) {
 
         if (!email) {
             return NextResponse.json(
-                { error: "Please provide an email address." },
+                { error: "Please enter your email address so we can help you reset your password." },
                 { status: 400 }
             );
         }
@@ -40,13 +40,13 @@ export async function POST(req: Request) {
         }
 
         return NextResponse.json(
-            { message: "If an account with that email exists, we've sent a password reset link." },
+            { message: "If we have an account with that email, you'll receive a password reset link shortly." },
             { status: 200 }
         );
     } catch (error) {
         console.error("FORGOT PASSWORD ERROR:", error);
         return NextResponse.json(
-            { error: "We encountered an unexpected issue. Please try again." },
+            { error: "Something went wrong on our end. Please try again." },
             { status: 500 }
         );
     }
