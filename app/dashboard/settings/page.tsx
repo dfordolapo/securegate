@@ -10,12 +10,12 @@ export default function SettingsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 space-y-1">
-          <nav className="flex flex-col space-y-1">
-            <a href="#" className="bg-blue-500/10 text-blue-400 px-3 py-2 text-sm font-medium rounded-lg">General Profile</a>
-            <a href="#" className="text-muted hover:bg-foreground/5 hover:text-foreground px-3 py-2 text-sm font-medium rounded-lg transition-colors">Security Settings</a>
-            <a href="#" className="text-muted hover:bg-foreground/5 hover:text-foreground px-3 py-2 text-sm font-medium rounded-lg transition-colors">Notifications</a>
-            <a href="#" className="text-muted hover:bg-foreground/5 hover:text-foreground px-3 py-2 text-sm font-medium rounded-lg transition-colors">API Keys</a>
-          </nav>
+          <div className="flex flex-col space-y-1">
+            <div className="bg-blue-500/10 text-blue-400 px-3 py-2 text-sm font-medium rounded-lg cursor-default">General Profile</div>
+            <div className="text-muted px-3 py-2 text-sm font-medium rounded-lg cursor-default">Security Settings</div>
+            <div className="text-muted px-3 py-2 text-sm font-medium rounded-lg cursor-default">Notifications</div>
+            <div className="text-muted px-3 py-2 text-sm font-medium rounded-lg cursor-default">API Keys</div>
+          </div>
         </div>
 
         <div className="lg:col-span-2 space-y-6">
