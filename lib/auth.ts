@@ -2,6 +2,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { compare } from "bcryptjs";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { rateLimit } from "./rate-limit";
 
 import { prisma } from "./prisma";
 
@@ -29,6 +30,16 @@ export const authOptions: NextAuthOptions = {
             },
 
             async authorize(credentials) {
+                const ip = "global";
+
+                const allowed = await rateLimit(ip);
+
+                if (!allowed) {
+                    throw new Error(
+                        "Too many login attempts. Try again later."
+                    );
+                }
+
                 if (!credentials?.email || !credentials?.password) {
                     return null;
                 }
@@ -52,6 +63,9 @@ export const authOptions: NextAuthOptions = {
                     return null;
                 }
 
+                if (!user.emailVerified) {
+                    throw new Error("Please verify your email before logging in");
+                }
                 return {
                     id: user.id,
                     email: user.email,

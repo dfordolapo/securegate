@@ -1,45 +1,44 @@
 "use client";
 
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 
-export default function LoginPage() {
-    const router = useRouter();
-
+export default function ForgotPasswordPage() {
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+    const [message, setMessage] = useState("");
     const [isPending, setIsPending] = useState(false);
 
-    const handleLogin = async (e: React.FormEvent) => {
+    const handleForgotPassword = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsPending(true);
-        setError("");
+        setMessage("");
 
-        const result = await signIn("credentials", {
-            email,
-            password,
-            redirect: false,
+        const res = await fetch("/api/forgot-password", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email }),
         });
 
-        if (result?.error) {
-            setError("That email and password combination doesn't match our records.");
-            setIsPending(false);
-            return;
+        const data = await res.json();
+        
+        if (res.ok) {
+            setMessage(data.message);
+        } else {
+            setMessage(data.error || "We encountered an unexpected issue. Please try again.");
         }
-
-        router.push("/dashboard");
+        setIsPending(false);
     };
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-black text-white">
             <form
-                onSubmit={handleLogin}
+                onSubmit={handleForgotPassword}
                 className="flex w-[350px] flex-col gap-4 rounded-xl bg-zinc-900 p-6"
             >
-                <h1 className="text-2xl font-bold">Login</h1>
+                <h1 className="text-2xl font-bold">Reset Password</h1>
+                <p className="text-sm text-zinc-400">Enter your email address and we'll send you a link to reset your password.</p>
 
                 <input
                     type="email"
@@ -47,21 +46,8 @@ export default function LoginPage() {
                     className="rounded-md bg-zinc-800 p-3"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    required
                 />
-
-                <input
-                    type="password"
-                    placeholder="Password"
-                    className="rounded-md bg-zinc-800 p-3"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-
-                <div className="flex justify-between items-center px-1">
-                    <Link href="/forgot-password" className="text-sm text-zinc-400 hover:text-white transition-colors">
-                        Forgot your password?
-                    </Link>
-                </div>
 
                 <button
                     type="submit"
@@ -74,14 +60,20 @@ export default function LoginPage() {
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
                     ) : null}
-                    {isPending ? "Logging in..." : "Login"}
+                    {isPending ? "Sending link..." : "Send Reset Link"}
                 </button>
 
-                {error && (
-                    <p className="text-center text-red-400 text-sm">
-                        {error}
+                {message && (
+                    <p className="text-center text-sm text-zinc-300">
+                        {message}
                     </p>
                 )}
+
+                <div className="text-center mt-2">
+                    <Link href="/login" className="text-sm text-zinc-400 hover:text-white transition-colors">
+                        Back to Login
+                    </Link>
+                </div>
             </form>
         </div>
     );

@@ -13,7 +13,7 @@ export async function POST(req: Request) {
 
         if (!email || !password) {
             return NextResponse.json(
-                { error: "Missing email or password" },
+                { error: "Please provide both an email and a password to sign up." },
                 { status: 400 }
             );
         }
@@ -44,8 +44,12 @@ export async function POST(req: Request) {
             });
 
             // Resend the email
-            await sendVerificationEmail(email, token);
-
+            try {
+                await sendVerificationEmail(email, token);
+            } catch (error) {
+                console.log("SIGNUP ERROR:", error);
+            }
+            console.log("EMAIL WOULD SEND HERE")
             return NextResponse.json(
                 { message: "Verification email resent successfully", user: existingUser },
                 { status: 200 }
@@ -85,7 +89,7 @@ export async function POST(req: Request) {
         console.log("SIGNUP ERROR:", error);
 
         return NextResponse.json(
-            { error: "Something went wrong" },
+            { error: "We encountered an unexpected issue while creating your account. Please try again." },
             { status: 500 }
         );
     }
